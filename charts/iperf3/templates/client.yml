@@ -19,7 +19,6 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
             - labelSelector:
                 matchExpressions:
                 - key: app.kubernetes.io/name
