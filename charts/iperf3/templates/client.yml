@@ -39,4 +39,4 @@ spec:
               while true; do sleep 1; done
       restartPolicy: Always
 status: {}
-{{ -end }}
+{{- end }}
