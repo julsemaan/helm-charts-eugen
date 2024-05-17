@@ -6,6 +6,14 @@ service:
   port: 40000
   # The k8s service type
   type: LoadBalancer
+# Deploys a StatefulSet to use as a client to the iperf3 server
+client:
+  enabled: false
+  image:
+    # if needed you can use another image
+    repository: networkstatic/iperf3
+    # adapt if you want to use a different tag
+    tag: "latest"
 # set to true for verbose logging
 verbose: false
 # change this to set the number of replicas
