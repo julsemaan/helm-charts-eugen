@@ -16,17 +16,18 @@ spec:
         app.kubernetes.io/name: iperf3-client
         app.kubernetes.io/instance: {{.Release.Name}}
     spec:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: NotIn
-                values:
-                - iperf3
-            topologyKey: topology.kubernetes.io/zone
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: NotIn
+                  values:
+                  - iperf3
+              topologyKey: topology.kubernetes.io/zone
       containers:
         - name: iperf3
           image: {{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}
