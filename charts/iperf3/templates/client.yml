@@ -22,10 +22,9 @@ spec:
             - labelSelector:
                 matchExpressions:
                 - key: app.kubernetes.io/name
-                  operator: NotIn
+                  operator: In
                   values:
                   - iperf3
-              topologyKey: kubernetes.io/hostname
       containers:
         - name: iperf3
           image: {{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}
