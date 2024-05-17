@@ -26,7 +26,7 @@ deployment:
     tag: "latest"
 
 stunnel:
-  psk: banana
+  psk: "test1:oaP4EishaeSaishei6rio6xeeph3az"
   image:
     repository: rasooll/stunnel
     tag: "latest"
