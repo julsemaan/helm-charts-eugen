@@ -28,9 +28,8 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      labels:
-        app.kubernetes.io/name: stunnel-iperf3-client
-        app.kubernetes.io/instance: {{.Release.Name}}
+      app.kubernetes.io/name: stunnel-iperf3-client
+      app.kubernetes.io/instance: {{.Release.Name}}
   template:
     metadata:
       labels:
