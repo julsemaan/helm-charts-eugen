@@ -1,3 +1,4 @@
+{{- if .Values.client.enabled -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -38,4 +39,4 @@ spec:
               while true; do sleep 1; done
       restartPolicy: Always
 status: {}
-
+{{ -end }}
