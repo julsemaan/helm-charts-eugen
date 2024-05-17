@@ -35,6 +35,16 @@ spec:
         app.kubernetes.io/name: stunnel-iperf3-server
         app.kubernetes.io/instance: {{.Release.Name}}
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - iperf3
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: {{ .Chart.Name }}-stunnel
           image: "{{ .Values.stunnel.image.repository }}:{{ .Values.stunnel.image.tag | default .Chart.AppVersion }}"
