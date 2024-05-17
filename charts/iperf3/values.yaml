@@ -4,6 +4,8 @@ service:
   # externalIp:
   # the port to bind on the service, if enabled.
   port: 40000
+  # The k8s service type
+  type: LoadBalancer
 # set to true for verbose logging
 verbose: false
 # change this to set the number of replicas
