@@ -15,7 +15,7 @@ data:
     accept = 0.0.0.0:40000
     connect = iperf3-stunnel-server:40000
     PSKsecrets = /etc/stunnel/iperf3.psk
-  iperf3.psk: {{ .stunnel.psk | quote }}
+  iperf3.psk: {{ .Values.stunnel.psk | quote }}
 ---
 apiVersion: apps/v1
 kind: Deployment
