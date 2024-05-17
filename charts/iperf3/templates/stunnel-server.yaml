@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Chart.Name }}-stunnel-server
+  labels:
+    app.kubernetes.io/name: stunnel-iperf3
+    app.kubernetes.io/instance: {{.Release.Name}}
+data:
+  stunnel.conf: |
+    output = /dev/stdout
+    foreground = yes
+    [iperf3]
+    accept = 0.0.0.0:40000
+    connect = iperf3:40000
+    PSKsecrets = /etc/stunnel/iperf3.psk
+  iperf3.psk: {{ .Values.stunnel.psk | quote }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name }}-stunnel-server
+  labels:
+    app.kubernetes.io/name: stunnel-iperf3-server
+    app.kubernetes.io/instance: {{.Release.Name}}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: stunnel-iperf3-server
+      app.kubernetes.io/instance: {{.Release.Name}}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: stunnel-iperf3-server
+        app.kubernetes.io/instance: {{.Release.Name}}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-stunnel
+          image: "{{ .Values.stunnel.image.repository }}:{{ .Values.stunnel.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.stunnel.image.pullPolicy }}
+          ports:
+            - name: iperf3
+              containerPort: 40000
+              protocol: TCP
+          volumeMounts:
+            - name: stunnel-config
+              mountPath: "/etc/stunnel"
+      volumes:
+        - name: stunnel-config
+          configMap:
+            name: {{.Chart.Name }}-stunnel-server
+            defaultMode: 0600
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Chart.Name }}-stunnel-server
+  labels:
+    app.kubernetes.io/name: stunnel-iperf3-server
+    app.kubernetes.io/instance: {{.Release.Name}}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 40000
+      targetPort: 40000
+      protocol: TCP
+      name: iperf3
+  selector:
+    app.kubernetes.io/name: stunnel-iperf3-server
+    app.kubernetes.io/instance: {{.Release.Name}}
